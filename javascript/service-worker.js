@@ -2,18 +2,17 @@
     
 };
 
-var hitCounter = 0;
-
 this.addEventListener('fetch', function (event) {
-    if (!navigator.onLine) {
-        var times_text = 'time';
+    if (navigator.onLine) {
+        event.respondWith(event.default());
+    }
+    else{
+        
+        var response = "<h1>App offline try again in few minutes.</h1>",
+            link = "<a href='" + event.request.url + "'>Home</a>";
 
-        hitCounter++;
-
-        if (hitCounter > 1) {
-            times_text = 'times';
-        }
-
-        event.respondWith(new Response('Page refreshed ' + hitCounter + ' ' + times_text));
+        event.respondWith(
+            new Response(new Blob([response, link], { type: 'text/html' }), {
+                headers: { "Content-Type": "text/html" }}));
     }
 });
